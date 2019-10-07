@@ -64,7 +64,6 @@ class CrawlDicio() {
         return palavra
     }
 
-
     private fun getDefinicoes(content: Elements, tipo: JSONArray, indexes: ArrayList<Int>): JSONObject {
         val significados = JSONObject()
         val regex = Regex("[\\[\\]]")

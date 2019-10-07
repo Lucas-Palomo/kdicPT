@@ -20,7 +20,6 @@ class CrawlSinonimos() {
     fun getSinonimos(word: String): JSONArray {
         val sinonimos = JSONArray()
         try {
-
             val doc = Jsoup.connect(makeurl(word)).get()
             sinonimos.addAll(collect(doc))
         } catch (e: HttpStatusException) {
