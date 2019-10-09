@@ -14,7 +14,7 @@ class CrawlPensador {
     var utils = Utils()
 
     private fun makeurl(word: String, index: Int): String {
-        return "https://www.pensador.com/$word/$index"
+        return "https://www.pensador.com/${utils.removerAcentos(word,"dicio")}/$index"
     }
 
     fun getFrases(word: String): JSONArray {

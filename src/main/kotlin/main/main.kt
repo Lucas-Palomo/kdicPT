@@ -12,15 +12,21 @@ fun main(args: Array<String>) {
     val crawlerSinonimos = CrawlSinonimos()
     val crawlAntonimos = CrawlAntonimos()
     val crawlNomes = CrawlNomes()
+    val crawlInformal = CrawlInformal()
 
-    for (word in listOf("saul","fsadasda")) {
-        val palavra = JSONObject()
-        palavra.put("pessoa",crawlNomes.getNome(word))
+    for (word in listOf("samurai x", "você")) {
+
 //        val palavra = crawlerDicio.cat(word)
+        val palavra = JSONObject()
+
+//        palavra.put("informal",crawlInformal.cat(word))
+
+
+//        palavra.put("pessoa",crawlNomes.getNome(word))
 //        palavra.put("sinonimos",crawlerSinonimos.getSinonimos(word))
 //        palavra.put("antonimos",crawlAntonimos.getAntonimos(word))
-//        palavra.put("frases",crawlerPensador.getFrases(word))
-        println(palavra.toJSONString()+"\n")
+        palavra.put("frases",crawlerPensador.getFrases(word))
+        println(palavra.toJSONString() + "\n")
     }
 
 
