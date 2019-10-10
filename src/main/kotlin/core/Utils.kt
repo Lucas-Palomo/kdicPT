@@ -15,13 +15,12 @@ class Utils {
             put("i", listOf("í"))
             put("o", listOf("ó", "ô", "õ"))
             put("u", listOf("ú", "ü"))
-            put("c", listOf("ç"))
         }
     }
 
     var dicioEspeciais = object : HashMap<String, List<String>>() {
         init {
-            put("beca-3", listOf("beça"))
+            put("beca-3", listOf("beca"))
         }
     }
 
@@ -46,14 +45,15 @@ class Utils {
             }
             "dicio" -> {
                 if (palavra.contains(" ")) {
-                    dicioEspeciais.putAll(especiaisUnicos)
                     return replaceWord(
                         palavra.toLowerCase(),
                         dicioEspeciais
                     ).replace(" ", "-")
                 } else {
                     if (palavra.length > 1) {
-                        return replaceWord(palavra.toLowerCase(), especiaisUnicos)
+                        especiaisUnicos.put("c", listOf("ç"))
+                        dicioEspeciais.putAll(especiaisUnicos)
+                        return replaceWord(palavra.toLowerCase(), dicioEspeciais)
                     } else {
                         return replaceWord(palavra.toLowerCase(), dicioUnico)
                     }
@@ -77,12 +77,12 @@ class Utils {
 
     fun sentenceClear(sentence: String): String {
         val outputString = StringBuilder()
-        val re = Regex("[;\\/:*?\"<>|&']")
+        val re = Regex("[-;\\/:*?\"<>|&']")
         for (word in sentence.split(" ")) {
             outputString.append(re.replace(decode(word), " ").trim())
             outputString.append(" ")
         }
-        return outputString.toString().trimEnd()
+        return outputString.toString().trimEnd().toLowerCase().trimStart()
     }
 
     private fun decode(input: String): String {
@@ -99,7 +99,7 @@ class Utils {
         return file;
     }
 
-    fun replaceNumber(word:String):String{
+    fun removerNumeros(word:String):String{
         return Regex("[0-9]|[.]").replace(word,"").trim().toLowerCase();
     }
 

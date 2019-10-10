@@ -50,7 +50,7 @@ class CrawlSinonimos() {
                 val tagSinonimos = tag.children()[1]
                 if (tagSinonimos.hasClass("sinonimos")) {
                     for (sinonimo in tagSinonimos.text().split(",")) {
-                        sinonimos.add(utils.replaceNumber(sinonimo))
+                        sinonimos.add(utils.removerNumeros(sinonimo))
                     }
                 }
 
@@ -59,7 +59,7 @@ class CrawlSinonimos() {
             } else {
                 for (sinonimo in tag.children()) {
                     for (sin in sinonimo.text().split(",")) {
-                        sinonimosColetados.add(utils.replaceNumber(sin))
+                        sinonimosColetados.add(utils.removerNumeros(sin))
                     }
                 }
             }

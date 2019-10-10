@@ -49,7 +49,7 @@ class CrawlAntonimos() {
                 val tagAntonimos = tag.children()[1]
                 if (tagAntonimos.hasClass("antonimos")) {
                     for (antonimo in tagAntonimos.text().split(",")) {
-                        antonimos.add(utils.replaceNumber(antonimo))
+                        antonimos.add(utils.removerNumeros(antonimo))
                     }
                 }
 
@@ -58,7 +58,7 @@ class CrawlAntonimos() {
             } else {
                 for (antonimo in tag.children()) {
                     for (ant in antonimo.text().split(",")) {
-                        antonimosColetados.add(utils.replaceNumber(ant))
+                        antonimosColetados.add(utils.removerNumeros(ant))
                     }
                 }
             }

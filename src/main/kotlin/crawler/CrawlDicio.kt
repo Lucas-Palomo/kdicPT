@@ -28,16 +28,16 @@ class CrawlDicio() {
             val doc = Jsoup.connect(makeurl(word)).get()
             return Classifier(doc)
         } catch (e: HttpStatusException) {
-            utils.getFile("logs","unknowDicio").appendText("$word\n")
+            utils.getFile("logs", "unknowDicio").appendText("$word\n")
         } catch (e: IOException) {
-            utils.getFile("logs","errorDicio").appendText("$e/$word\n")
+            utils.getFile("logs", "errorDicio").appendText("$e/$word\n")
         }
         return JSONObject()
     }
 
-    private fun Classifier(doc: Document):JSONObject {
+    private fun Classifier(doc: Document): JSONObject {
         val container = doc.getElementsByClass("container")[1]
-        val content = container.getElementsByAttributeValue("itemprop","description")[0].allElements
+        val content = container.getElementsByAttributeValue("itemprop", "description")[0].allElements
 
         val palavra = JSONObject()
         val tipo = JSONArray()
@@ -48,8 +48,8 @@ class CrawlDicio() {
                 indexes.add(index)
                 tipo.add(tag.text())
             } else {
-                if(tag.attributes()["class"] == "significado"){
-                    palavra.put("significado",tag.text())
+                if (tag.attributes()["class"] == "significado") {
+                    palavra.put("significado", tag.text())
                 }
                 if (tag.attributes()["class"] == "etim") {
                     indexes.add(index)
@@ -60,13 +60,29 @@ class CrawlDicio() {
         }
 
         palavra.put("tipo", tipo)
-        palavra.put("significados", getDefinicoes(content, tipo, indexes))
+        if (indexes.size > 1) {
+            palavra.put("significados", definicoes(content, tipo, indexes))
+        } else {
+            palavra.put("significados", definicaoUnica(content))
+        }
         return palavra
     }
 
-    private fun getDefinicoes(content: Elements, tipo: JSONArray, indexes: ArrayList<Int>): JSONObject {
+    private fun definicaoUnica(content: Elements): JSONArray {
+        val tag = content[0];
+        val definicoes = JSONArray()
+        for (children in tag.children()) {
+            if (!children.hasClass("cl") && children.nodeName() != "br") {
+                definicoes.add(children.text())
+            }
+        }
+        return definicoes
+    }
+
+    private fun definicoes(content: Elements, tipo: JSONArray, indexes: ArrayList<Int>): JSONObject {
         val significados = JSONObject()
         val regex = Regex("[\\[\\]]")
+
         for ((i, index) in indexes.withIndex()) {
             var num = index;
             val definicoes = JSONArray();
@@ -78,7 +94,6 @@ class CrawlDicio() {
                         if (tag.attributes()["class"] == "tag") {
                             tag.text()
                             val sig = JSONObject()
-
                             sig.put(
                                 regex.replace(tag.text(), ""),
                                 tag.parent().text().replace(tag.text(), "").trimStart()
@@ -113,7 +128,6 @@ class CrawlDicio() {
         }
         return exemplosFrases
     }
-
 
 
 }
